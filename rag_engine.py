@@ -5,10 +5,8 @@ from sentence_transformers import SentenceTransformer
 from groq import Groq
 from dotenv import load_dotenv
 
-# Load API key from .env file
 load_dotenv()
 
-# Load the sentence transformer model
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 def create_vector_store(chunks):
@@ -20,7 +18,7 @@ def create_vector_store(chunks):
     index.add(embeddings)
     return index, chunks
 
-def search_similar_chunks(query, index, chunks, top_k=3):
+def search_similar_chunks(query, index, chunks, top_k=5):
     """Find the most relevant chunks for a question."""
     query_vector = model.encode([query])
     query_vector = np.array(query_vector, dtype='float32')
@@ -42,7 +40,7 @@ Question: {question}
 Answer based only on the context provided above."""
 
     response = client.chat.completions.create(
-        model="llama3-8b-8192",
+        model="llama-3.1-8b-instant",
         messages=[
             {"role": "user", "content": prompt}
         ]
